@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -57,6 +58,19 @@ func NewMeanScoreTopRanking() *MeanScoreTopRanking {
 
 // Rank スコアの平均値の高い順にランキングを作成
 func (m MeanScoreTopRanking) Rank(fileData [][]string) ResultScoreBoad {
+	r := m.totallingScoreAndCountByUser(fileData)
+	r = m.calcAverage(r)
+	result := m.addRank(r)
+
+	return result
+}
+
+type totalingScoreList struct {
+	playerID int
+	count    int
+}
+
+func (m MeanScoreTopRanking) totallingScoreAndCountByUser(fileData [][]string) []map[string]int {
 	r := make([]map[string]int, len(fileData)-1)
 	for i, v := range fileData {
 		if i == 0 {
@@ -83,23 +97,30 @@ func (m MeanScoreTopRanking) Rank(fileData [][]string) ResultScoreBoad {
 			}
 		}
 	}
-	return m.calcAverage(r)
+	return deleteEmptyItem(r)
+}
+
+func deleteEmptyItem(m []map[string]int) []map[string]int {
+	result := make([]map[string]int, 0, len(m))
+	for _, v := range m {
+		if len(v) == 0 {
+			continue
+		}
+		result = append(result, v)
+	}
+	return result
 }
 
 // プレイヤーごとの平均値を計算して配列に組み込む
-func (m MeanScoreTopRanking) calcAverage(playerScoreList []map[string]int) ResultScoreBoad {
-
-	result := []map[string]int{}
+func (m MeanScoreTopRanking) calcAverage(playerScoreList []map[string]int) []map[string]int {
+	result := make([]map[string]int, 0, len(playerScoreList))
 	for _, l := range playerScoreList {
 		m := make(map[string]int, 2)
-		if !isEmpty(l) {
-			m["mean_score"] = l["total_score"] / l["count"]
-			m["player_id"] = l["player_id"]
-			result = append(result, m)
-		}
+		m["mean_score"] = l["total_score"] / l["count"]
+		m["player_id"] = l["player_id"]
+		result = append(result, m)
 	}
-
-	return m.addRank(result)
+	return result
 }
 
 // ランキングを付与して10位以下は切り捨てる
@@ -108,6 +129,7 @@ func (m MeanScoreTopRanking) addRank(score []map[string]int) ResultScoreBoad {
 	rank := 1
 	count := 1
 	before := 0
+	sort.SliceStable(score, func(i, j int) bool { return score[i]["mean_score"] > score[j]["mean_score"] })
 	for _, v := range score {
 		var sl ScoreList
 		if before != v["mean_score"] {
