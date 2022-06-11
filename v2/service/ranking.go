@@ -11,6 +11,7 @@ type Ranker struct {
 	logic RankingStrategy
 }
 
+// NewRanker
 func NewRanker(logic RankingStrategy) *Ranker {
 	return &Ranker{logic: logic}
 }
@@ -20,6 +21,7 @@ type PrintList struct {
 	Header []string
 }
 
+// Execute start ranking process
 func (r Ranker) Execute(fileData [][]string) PrintList {
 	return PrintList{
 		Result: r.logic.Rank(fileData),
@@ -28,6 +30,7 @@ func (r Ranker) Execute(fileData [][]string) PrintList {
 
 }
 
+// RankingStrategy interface ranking logic
 type RankingStrategy interface {
 	Rank(fileData [][]string) ResultScoreBoad
 	GetHeader() []string
