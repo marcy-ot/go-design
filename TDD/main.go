@@ -14,11 +14,7 @@ func main() {
 	csv := NewCsvUtil("./testdata/game_score.csv")
 	data := csv.Parse()
 
-	scoreBoad := NewScoreBoad(data)
-	scoreBoad.sumScoreByPlayer()
-	scoreBoad.addRank()
-	result := scoreBoad.cut(10)
-
+	result := NewScoreBoad(data).sumScoreByPlayer().addRank().cut(10)
 	result.printConsole()
 }
 
@@ -129,7 +125,7 @@ func (s *ScoreBoad) appendScore(id, score int) {
 	s.scores = append(s.scores, scoreList)
 }
 
-func (s *ScoreBoad) addRank() {
+func (s *ScoreBoad) addRank() *ScoreBoad {
 	// スコアが高い順にソート
 	sort.SliceStable(s.scores, func(i, j int) bool {
 		return s.scores[i].score > s.scores[j].score
@@ -146,9 +142,10 @@ func (s *ScoreBoad) addRank() {
 		}
 		s.scores[i].rank = rank
 	}
+	return s
 }
 
-func (s ScoreBoad) cut(limit int) *ScoreBoad {
+func (s *ScoreBoad) cut(limit int) *ScoreBoad {
 	result := NewScoreBoad([][]string{})
 	for i, v := range s.scores {
 		if i != 0 {

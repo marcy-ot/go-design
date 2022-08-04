@@ -50,23 +50,26 @@ func TestZeroCsvParse(t *testing.T) {
 	}
 }
 
+var emptyCsvData := [][]string{}
+var normalCsvDagta := [][]string{
+	{
+		"create_timestamp",
+		"player_id",
+		"score",
+	},
+	{
+		"2021/10/1",
+		"1",
+		"0",
+	}, {
+		"2021/10/1",
+		"2",
+		"123",
+	},
+}
+
 func TestNewScoreBoad(t *testing.T) {
-	scoreBoad := NewScoreBoad([][]string{
-		{
-			"create_timestamp",
-			"player_id",
-			"score",
-		},
-		{
-			"2021/10/1",
-			"1",
-			"0",
-		}, {
-			"2021/10/1",
-			"2",
-			"123",
-		},
-	})
+	scoreBoad := NewScoreBoad(normalCsvDagta)
 	want := &ScoreBoad{
 		scores: []Score{
 			{
@@ -87,7 +90,7 @@ func TestNewScoreBoad(t *testing.T) {
 		}
 	})
 
-	scoreBoad = NewScoreBoad([][]string{})
+	scoreBoad = NewScoreBoad(emptyCsvData)
 	want = &ScoreBoad{}
 	t.Run("空リストのマッピング", func(t *testing.T) {
 		if !reflect.DeepEqual(scoreBoad, want) {
@@ -96,6 +99,10 @@ func TestNewScoreBoad(t *testing.T) {
 	})
 }
 
+var emptyScoreBoad = &ScoreBoad{}
+var normalScoreBoad = &ScoreBoad{
+	
+}
 func TestSumScore(t *testing.T) {
 	want := NewScoreBoad([][]string{
 		{
