@@ -50,8 +50,8 @@ func TestZeroCsvParse(t *testing.T) {
 	}
 }
 
-var emptyCsvData := [][]string{}
-var normalCsvDagta := [][]string{
+var emptyCsvData = [][]string{}
+var normalCsvDagta = [][]string{
 	{
 		"create_timestamp",
 		"player_id",
@@ -100,9 +100,8 @@ func TestNewScoreBoad(t *testing.T) {
 }
 
 var emptyScoreBoad = &ScoreBoad{}
-var normalScoreBoad = &ScoreBoad{
-	
-}
+var normalScoreBoad = &ScoreBoad{}
+
 func TestSumScore(t *testing.T) {
 	want := NewScoreBoad([][]string{
 		{
