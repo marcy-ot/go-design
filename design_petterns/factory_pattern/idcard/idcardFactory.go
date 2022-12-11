@@ -4,6 +4,7 @@ import (
 	"develop/gotraining/factory_pattern/framework"
 )
 
+// インスタンスを生成する具体的な処理を記載していく
 // IdcardFactory メソッドcreateProduct, registerProductを実装しているクラス
 // FactoryIFを満たすようにメソッドを実装している
 type IdcardFactory struct {

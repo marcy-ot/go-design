@@ -8,6 +8,7 @@ type FactoryIF interface {
 	RegisterProduct(product Product)
 }
 
+// インスタンスの生成手順を纏めた抽象クラス。
 // Factory メソッドcreateを実装している抽象クラス
 type Factory struct {
 	FactoryIF

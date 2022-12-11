@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+// クライアントサイドが使用するメソッドの具体的な処理を記載する
 // IdCard メソッドuseを実装しているクラス
 type IdCard struct {
 	owner string
